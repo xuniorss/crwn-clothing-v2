@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut } from 'firebase/auth'
-import { collection, doc, getDoc, getFirestore, setDoc, writeBatch } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch } from 'firebase/firestore'
 
 const firebaseConfig = {
    apiKey: 'AIzaSyCv2xY5jS92QH3f1UJ1oode2oR28NRjE24',
@@ -24,31 +24,45 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 export const db = getFirestore()
 
 // USADO PARA ADD "CATEGORIES" NO BANCO DE DADOS
-// export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
-//    const collectionRef = collection(db, collectionKey)
-//    const batch = writeBatch(db)
-
-//    objectsToAdd.forEach((object) => {
-//       const docRef = doc(collectionRef, object.title.toLowerCase())
-//       batch.set(docRef, object)
-//    })
-
-//    await batch.commit()
-//    console.log('done')
-// }
-
-export const addCollectionAndDocuments = async (collectionKey, objectsToAdd, field) => {
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
    const collectionRef = collection(db, collectionKey)
    const batch = writeBatch(db)
 
    objectsToAdd.forEach((object) => {
-      const docRef = doc(collectionRef, object[field].toLowerCase())
+      const docRef = doc(collectionRef, object.title.toLowerCase())
       batch.set(docRef, object)
    })
 
    await batch.commit()
    console.log('done')
 }
+
+export const getCategoriesAndDocuments = async () => {
+   const collectionRef = collection(db, 'categories')
+   const q = query(collectionRef)
+
+   const querySnapshot = await getDocs(q)
+   const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+      const { title, items } = docSnapshot.data()
+      acc[title.toLowerCase()] = items
+      return acc
+   }, {})
+
+   return categoryMap
+}
+
+// export const addCollectionAndDocuments = async (collectionKey, objectsToAdd, field) => {
+//    const collectionRef = collection(db, collectionKey)
+//    const batch = writeBatch(db)
+
+//    objectsToAdd.forEach((object) => {
+//       const docRef = doc(collectionRef, object[field].toLowerCase())
+//       batch.set(docRef, object)
+//    })
+
+//    await batch.commit()
+//    console.log('done')
+// }
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
    if (!userAuth) return
