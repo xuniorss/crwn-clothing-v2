@@ -1,24 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import {
-   createUserWithEmailAndPassword,
-   getAuth,
-   GoogleAuthProvider,
-   onAuthStateChanged,
-   signInWithEmailAndPassword,
-   signInWithPopup,
-   signInWithRedirect,
-   signOut,
-} from 'firebase/auth'
-import {
-   collection,
-   doc,
-   getDoc,
-   getDocs,
-   getFirestore,
-   query,
-   setDoc,
-   writeBatch,
-} from 'firebase/firestore'
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut } from 'firebase/auth'
+import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch } from 'firebase/firestore'
 
 const firebaseConfig = {
    apiKey: 'AIzaSyCv2xY5jS92QH3f1UJ1oode2oR28NRjE24',
@@ -94,7 +76,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
       }
    }
 
-   return userDocRef
+   return userSnapshot
 }
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
