@@ -8,17 +8,13 @@ import Home from './routes/home/home.component'
 import Navigation from './routes/navigation/navigation.component'
 import Shop from './routes/shop/shop.component'
 import { setCurrentUser } from './store/user/user.action'
-import {
-   createUserDocumentFromAuth,
-   getCurrentUser,
-   onAuthStateChangedListener,
-} from './utils/firebase/firebase.utils'
+import { createUserDocumentFromAuth, getCurrentUser, onAuthStateChangedListener } from './utils/firebase/firebase.utils'
 
 export default function App() {
    const dispatch = useDispatch()
 
    useEffect(() => {
-      getCurrentUser().then((user) => console.log(user))
+      getCurrentUser()
    }, [])
 
    return (
